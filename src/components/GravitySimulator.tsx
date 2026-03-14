@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useUser } from '../context/UserContext';
 import { useGravity } from '../hooks/useGravity';
+import { Mars3D } from './Mars3D';
 
 export const GravitySimulator: React.FC = () => {
   const { state, setProgressStep } = useUser();
@@ -68,6 +69,21 @@ export const GravitySimulator: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* 3D Mars Visualization - WOW FACTOR */}
+        {planet === 'mars' && (
+          <motion.div
+            className="mb-8"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6 }}
+          >
+            <p className="text-center text-purple-300 mb-4 font-bold text-lg">
+              🌟 Welcome to Mars! 🌟
+            </p>
+            <Mars3D size={2} />
+          </motion.div>
+        )}
 
         {/* Jump Animation Area */}
         <div className="bg-black/40 backdrop-blur-md rounded-lg p-8 border border-purple-500/30 mb-8">
