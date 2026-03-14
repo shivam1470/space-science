@@ -56,7 +56,7 @@ export const GravitySimulator: React.FC = () => {
                 max="1"
                 step="0.01"
                 value={planet === 'earth' ? 0 : 1}
-                onChange={(e) => setPlanet(e.target.value === '0' ? 'earth' : 'mars')}
+                onChange={(e) => setPlanet(parseFloat(e.target.value) < 0.5 ? 'earth' : 'mars')}
                 className="w-full h-3 bg-gradient-to-r from-blue-500 to-red-500 rounded-lg appearance-none cursor-pointer"
               />
             </motion.div>
