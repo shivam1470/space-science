@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useUser } from '../context/UserContext';
 import { useGravity } from '../hooks/useGravity';
-import { Mars3D } from './Mars3D';
+import MarsScene from './MarsScene';
 
 export const GravitySimulator: React.FC = () => {
   const { state, setProgressStep } = useUser();
@@ -81,7 +81,7 @@ export const GravitySimulator: React.FC = () => {
             <p className="text-center text-purple-300 mb-4 font-bold text-lg">
               🌟 Welcome to Mars! 🌟
             </p>
-            <Mars3D size={2} />
+            <MarsScene />
           </motion.div>
         )}
 
