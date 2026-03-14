@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useUser, Role } from '../context/UserContext';
 
@@ -16,6 +16,7 @@ const roleEmojis: Record<Role, string> = {
 
 export const MissionComplete: React.FC = () => {
   const { state, resetState } = useUser();
+  const [showRocketLaunch, setShowRocketLaunch] = useState(true);
 
   const handleRestart = () => {
     resetState();
@@ -23,8 +24,102 @@ export const MissionComplete: React.FC = () => {
 
   const jumpMultiplier = 2.6;
 
+  useEffect(() => {
+    // Hide rocket launch animation after 4 seconds
+    const timer = setTimeout(() => {
+      setShowRocketLaunch(false);
+    }, 4000);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-indigo-950 via-black to-purple-900 flex items-center justify-center p-4 relative overflow-hidden">
+      {/* 🚀 ROCKET LAUNCH ANIMATION (WOW FACTOR!) */}
+      {showRocketLaunch && (
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {/* Rocket */}
+          <motion.div
+            className="absolute left-1/2 bottom-0 transform -translate-x-1/2 text-8xl"
+            initial={{ y: 0, opacity: 1 }}
+            animate={{ y: -window.innerHeight - 200, opacity: 0 }}
+            transition={{ duration: 3.5, ease: 'easeIn' }}
+          >
+            🚀
+          </motion.div>
+
+          {/* Rocket trail/flame */}
+          <motion.div
+            className="absolute left-1/2 bottom-0 transform -translate-x-1/2 w-20 h-96"
+            initial={{ y: 0, opacity: 0.8 }}
+            animate={{ y: -window.innerHeight - 200, opacity: 0 }}
+            transition={{ duration: 3.5, ease: 'easeIn' }}
+          >
+            <div className="relative w-full h-full">
+              {/* Flame 1 */}
+              <motion.div
+                className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-8 h-32 bg-gradient-to-t from-orange-600 via-yellow-500 to-transparent rounded-full blur-lg"
+                animate={{
+                  scaleY: [1, 1.2, 0.9, 1.1, 1],
+                  opacity: [0.8, 1, 0.7, 1, 0.8],
+                }}
+                transition={{ duration: 0.3, repeat: Infinity }}
+              />
+              {/* Flame 2 */}
+              <motion.div
+                className="absolute bottom-0 left-1/2 transform -translate-x-1/2 -translate-x-8 w-6 h-24 bg-gradient-to-t from-red-600 via-orange-500 to-transparent rounded-full blur-lg"
+                animate={{
+                  scaleY: [0.9, 1.1, 1, 1.2, 0.9],
+                  opacity: [0.7, 0.9, 1, 0.8, 0.7],
+                }}
+                transition={{ duration: 0.3, repeat: Infinity, delay: 0.1 }}
+              />
+              {/* Flame 3 */}
+              <motion.div
+                className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-x-8 w-6 h-28 bg-gradient-to-t from-yellow-500 via-orange-400 to-transparent rounded-full blur-lg"
+                animate={{
+                  scaleY: [1.1, 0.9, 1.2, 1, 1.1],
+                  opacity: [0.8, 0.7, 1, 0.9, 0.8],
+                }}
+                transition={{ duration: 0.3, repeat: Infinity, delay: 0.2 }}
+              />
+            </div>
+          </motion.div>
+
+          {/* Shockwave rings */}
+          {[0, 0.5, 1].map((delay) => (
+            <motion.div
+              key={delay}
+              className="absolute left-1/2 bottom-0 transform -translate-x-1/2 border-4 border-yellow-400 rounded-full"
+              initial={{ width: 100, height: 100, opacity: 1 }}
+              animate={{ width: 500, height: 500, opacity: 0 }}
+              transition={{ duration: 1, delay }}
+            />
+          ))}
+
+          {/* Spark particles */}
+          {[...Array(40)].map((_, i) => (
+            <motion.div
+              key={`spark-${i}`}
+              className="absolute left-1/2 bottom-12 w-2 h-2 bg-yellow-300 rounded-full"
+              initial={{
+                x: Math.random() * 200 - 100,
+                y: 0,
+                opacity: 1,
+              }}
+              animate={{
+                x: (Math.random() * 400 - 200) * 2,
+                y: -window.innerHeight,
+                opacity: 0,
+              }}
+              transition={{
+                duration: 2.5 + Math.random(),
+                ease: 'easeOut',
+              }}
+            />
+          ))}
+        </div>
+      )}
+
       {/* Confetti animation */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(50)].map((_, i) => (
@@ -54,7 +149,7 @@ export const MissionComplete: React.FC = () => {
         className="relative z-10 text-center max-w-2xl"
         initial={{ opacity: 0, y: 20, scale: 0.9 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.8 }}
+        transition={{ duration: 0.8, delay: 0.5 }}
       >
         {/* Mission Badge */}
         <motion.div
